@@ -1,5 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
+require('colors');
+
 const products = require('./data/products');
 const connectDB = require('./config/db');
 
@@ -29,5 +31,7 @@ app.get('/api/products/:id', (req, res) => {
 
 app.listen(
   PORT,
-  console.log(`Server running in ${NODE_ENV} mode on port ${PORT}`),
+  console.log(
+    `Server running in ${NODE_ENV} mode on port ${PORT}`.bgGreen.black.bold,
+  ),
 );
