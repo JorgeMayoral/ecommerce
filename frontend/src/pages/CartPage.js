@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 // Actions
-import { addToCart } from './../actions/cart.actions';
+import { addToCart, removeFromCart } from './../actions/cart.actions';
 
 // React Bootstrap
 import {
@@ -34,7 +34,9 @@ const CartPage = ({ match, location, history }) => {
     }
   }, [dispatch, productId, qty]);
 
-  const removeFromCartHandler = (id) => {};
+  const removeFromCartHandler = (id) => {
+    dispatch(removeFromCart(id));
+  };
 
   const checkoutHandler = () => {
     history.push('/login?redirect=shipping');
@@ -114,7 +116,9 @@ const CartPage = ({ match, location, history }) => {
                 disabled={cartItems.length === 0}
                 onClick={checkoutHandler}
               >
-                Proceed to checkout
+                {cartItems.length > 0
+                  ? 'Proceed to checkout'
+                  : 'Your cart is empty'}
               </Button>
             </ListGroup.Item>
           </ListGroup>
