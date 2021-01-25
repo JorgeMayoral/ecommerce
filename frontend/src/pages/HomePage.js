@@ -9,6 +9,8 @@ import { Col, Row } from 'react-bootstrap';
 
 // Components
 import Product from './../components/Product';
+import Loader from './../components/Loader';
+import Message from './../components/Message';
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -23,9 +25,9 @@ const HomePage = () => {
     <>
       <h1>Latest Products</h1>
       {loading ? (
-        <h2>Loading...</h2>
+        <Loader />
       ) : error ? (
-        <h3>{error.message}</h3>
+        <Message variant="danger">{error}</Message>
       ) : (
         <Row>
           {products.map((product) => (
