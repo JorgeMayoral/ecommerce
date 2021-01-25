@@ -4,7 +4,11 @@ require('colors');
 
 const connectDB = require('./config/db');
 
+// Routes
 const productRoutes = require('./routes/product.routes');
+
+// Middleware
+const { notFound, errorHandler } = require('./middleware/error.middleware');
 
 dotenv.config();
 
@@ -22,6 +26,9 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/products', productRoutes);
+
+app.use(notFound);
+app.use(errorHandler);
 
 app.listen(
   PORT,
