@@ -50,8 +50,16 @@ const destroyData = async () => {
   }
 };
 
-if (process.argv[2] === '-d') {
-  destroyData();
+if (process.env.NODE_ENV !== 'development') {
+  console.error(
+    'ERROR: You can use the seeder script ONLY in development mode'.red.inverse
+      .bold,
+  );
+  process.exit(1);
 } else {
-  importData();
+  if (process.argv[2] === '-d') {
+    destroyData();
+  } else {
+    importData();
+  }
 }
