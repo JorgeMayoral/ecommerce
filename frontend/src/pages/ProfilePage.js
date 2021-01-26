@@ -112,7 +112,7 @@ const ProfilePage = ({ location, history }) => {
             />
           </Form.Group>
 
-          <Button type="sumbit" variant="primary">
+          <Button type="submit" variant="primary">
             Update
           </Button>
         </Form>

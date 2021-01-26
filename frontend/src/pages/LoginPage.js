@@ -60,7 +60,7 @@ const LoginPage = ({ location, history }) => {
           />
         </Form.Group>
 
-        <Button type="sumbit" variant="primary">
+        <Button type="submit" variant="primary">
           Sign In
         </Button>
       </Form>
