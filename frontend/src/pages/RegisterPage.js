@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 // Actions
-import { login } from './../actions/user.actions';
+import { register } from './../actions/user.actions';
 
 // React Bootstrap
 import { Form, Button, Row, Col } from 'react-bootstrap';
@@ -13,14 +13,17 @@ import Message from './../components/Message';
 import Loader from './../components/Loader';
 import FormContainer from './../components/FormContainer';
 
-const LoginPage = ({ location, history }) => {
+const RegisterPage = ({ location, history }) => {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [message, setMessage] = useState(null);
 
   const dispatch = useDispatch();
 
-  const userLogin = useSelector((state) => state.userLogin);
-  const { loading, error, userInfo } = userLogin;
+  const userRegister = useSelector((state) => state.userRegister);
+  const { loading, error, userInfo } = userRegister;
 
   const redirect = location.search ? location.search.split('=')[1] : '/';
 
@@ -32,15 +35,30 @@ const LoginPage = ({ location, history }) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(login(email, password));
+    if (password !== confirmPassword) {
+      setMessage('Passwords do not match');
+    } else {
+      setMessage(null);
+      dispatch(register(name, email, password));
+    }
   };
 
   return (
     <FormContainer>
-      <h1>Sign In</h1>
+      <h1>Sign Up</h1>
       {error && <Message variant="danger">{error}</Message>}
+      {message && <Message variant="danger">{message}</Message>}
       {loading && <Loader />}
       <Form onSubmit={submitHandler}>
+        <Form.Group controlId="name">
+          <Form.Label>Name</Form.Label>
+          <Form.Control
+            type="name"
+            placeholder="Enter your name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </Form.Group>
         <Form.Group controlId="email">
           <Form.Label>Email Address</Form.Label>
           <Form.Control
@@ -59,16 +77,25 @@ const LoginPage = ({ location, history }) => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </Form.Group>
+        <Form.Group controlId="confirmPassword">
+          <Form.Label>Confirm password</Form.Label>
+          <Form.Control
+            type="password"
+            placeholder="Enter the same password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+        </Form.Group>
 
         <Button type="sumbit" variant="primary">
-          Sign In
+          Register
         </Button>
       </Form>
       <Row className="py-3">
         <Col>
-          New Customer?{' '}
-          <Link to={redirect ? `/register?redirect=${redirect}` : '/register'}>
-            Register
+          Already a Customer?{' '}
+          <Link to={redirect ? `/login?redirect=${redirect}` : '/login'}>
+            Sign In
           </Link>
           .
         </Col>
@@ -77,4 +104,4 @@ const LoginPage = ({ location, history }) => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;
