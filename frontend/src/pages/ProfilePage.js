@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+// Constants
+import { USER_UPDATE_PROFILE_RESET } from './../constants/user.constants';
+
 // Actions
 import { getUserDetails, updateUserProfile } from './../actions/user.actions';
 
@@ -33,14 +36,15 @@ const ProfilePage = ({ location, history }) => {
     if (!userInfo) {
       history.push('/login');
     } else {
-      if (!user.name) {
+      if (!user.name || success) {
+        dispatch({ type: USER_UPDATE_PROFILE_RESET });
         dispatch(getUserDetails('profile'));
       } else {
         setName(user.name);
         setEmail(user.email);
       }
     }
-  }, [history, userInfo, dispatch, user.name, user.email]);
+  }, [history, userInfo, dispatch, user.name, user.email, success]);
 
   const submitHandler = (e) => {
     e.preventDefault();
