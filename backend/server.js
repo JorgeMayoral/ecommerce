@@ -7,6 +7,7 @@ const connectDB = require('./config/db');
 // Routes
 const productRoutes = require('./routes/product.routes');
 const userRoutes = require('./routes/user.routes');
+const orderRoutes = require('./routes/order.routes');
 
 // Middleware
 const { notFound, errorHandler } = require('./middleware/error.middleware');
@@ -30,6 +31,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/orders', orderRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
