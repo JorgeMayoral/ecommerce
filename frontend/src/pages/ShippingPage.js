@@ -9,10 +9,20 @@ import { Form, Button } from 'react-bootstrap';
 
 // Components
 import FormContainer from './../components/FormContainer';
+import CheckoutSteps from './../components/CheckoutSteps';
 
 const ShippingPage = ({ history }) => {
   const cart = useSelector((state) => state.cart);
-  const { shippingAddress } = cart;
+  let { shippingAddress } = cart;
+
+  if (!shippingAddress) {
+    shippingAddress = {
+      address: '',
+      city: '',
+      postalCode: '',
+      country: '',
+    };
+  }
 
   const [address, setAddress] = useState(shippingAddress.address);
   const [city, setCity] = useState(shippingAddress.city);
@@ -29,7 +39,7 @@ const ShippingPage = ({ history }) => {
 
   return (
     <FormContainer>
-      <h1>Shipping</h1>
+      <CheckoutSteps step1 step2 />
       <Form onSubmit={submitHandler}>
         <Form.Group controlId="address">
           <Form.Label>Address</Form.Label>
