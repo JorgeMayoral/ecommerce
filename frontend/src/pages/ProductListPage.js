@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 // Actions
-import { listProducts } from './../actions/product.actions';
+import { listProducts, deleteProduct } from './../actions/product.actions';
 
 // React Bootstrap
 import { Table, Button, Row, Col } from 'react-bootstrap';
@@ -18,6 +18,13 @@ const ProductListPage = ({ history, match }) => {
   const productList = useSelector((state) => state.productList);
   const { loading, error, products } = productList;
 
+  const productDelete = useSelector((state) => state.productDelete);
+  const {
+    loading: loadingDelete,
+    error: errorDelete,
+    success: successDelete,
+  } = productDelete;
+
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
@@ -27,11 +34,11 @@ const ProductListPage = ({ history, match }) => {
     } else {
       history.push('/login');
     }
-  }, [dispatch, history, userInfo]);
+  }, [dispatch, history, userInfo, successDelete]);
 
-  const deleteHandler = (userId) => {
+  const deleteHandler = (id) => {
     if (window.confirm('Are you sure?')) {
-      // TODO: DELETE PRODUCTS
+      dispatch(deleteProduct(id));
     }
   };
 
@@ -52,6 +59,8 @@ const ProductListPage = ({ history, match }) => {
           </Button>
         </Col>
       </Row>
+      {loadingDelete && <Loader />}
+      {errorDelete && <Message variant="danger">{errorDelete}</Message>}
       {loading ? (
         <Loader />
       ) : error ? (
@@ -65,6 +74,7 @@ const ProductListPage = ({ history, match }) => {
               <th>PRICE</th>
               <th>CATEGORY</th>
               <th>BRAND</th>
+              <th>STOCK</th>
               <th></th>
             </tr>
           </thead>
@@ -76,6 +86,13 @@ const ProductListPage = ({ history, match }) => {
                 <td>{product.price} €</td>
                 <td>{product.category}</td>
                 <td>{product.brand}</td>
+                <td>
+                  {product.countInStock === 0 ? (
+                    <strong className="text-warning">Out of Stock</strong>
+                  ) : (
+                    product.countInStock
+                  )}
+                </td>
                 <td>
                   <LinkContainer to={`/admin/product/${product._id}/edit`}>
                     <Button variant="info" className="btn-sm m-1">
