@@ -20,6 +20,6 @@ router
   .get(getProductsById)
   .delete(protect, admin, deleteProduct)
   .put(protect, admin, updateProduct);
-router.route('/:id/review').put(protect, createProductReview);
+router.route('/:id/review').post(protect, createProductReview);
 
 module.exports = router;
