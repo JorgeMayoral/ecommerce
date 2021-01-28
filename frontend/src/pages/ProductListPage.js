@@ -2,7 +2,14 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 // Actions
-import { listProducts, deleteProduct } from './../actions/product.actions';
+import {
+  listProducts,
+  deleteProduct,
+  createProduct,
+} from './../actions/product.actions';
+
+// Constants
+import { PRODUCT_CREATE_RESET } from './../constants/product.constants';
 
 // React Bootstrap
 import { Table, Button, Row, Col } from 'react-bootstrap';
@@ -25,16 +32,37 @@ const ProductListPage = ({ history, match }) => {
     success: successDelete,
   } = productDelete;
 
+  const productCreate = useSelector((state) => state.productCreate);
+  const {
+    loading: loadingCreate,
+    error: errorCreate,
+    success: successCreate,
+    product: createdProduct,
+  } = productCreate;
+
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
   useEffect(() => {
-    if (userInfo && userInfo.isAdmin) {
-      dispatch(listProducts());
-    } else {
+    dispatch({ type: PRODUCT_CREATE_RESET });
+
+    if (!userInfo.isAdmin) {
       history.push('/login');
     }
-  }, [dispatch, history, userInfo, successDelete]);
+
+    if (successCreate) {
+      history.push(`/admin/product/${createdProduct._id}/edit`);
+    } else {
+      dispatch(listProducts());
+    }
+  }, [
+    dispatch,
+    history,
+    userInfo,
+    successDelete,
+    successCreate,
+    createdProduct,
+  ]);
 
   const deleteHandler = (id) => {
     if (window.confirm('Are you sure?')) {
@@ -43,7 +71,7 @@ const ProductListPage = ({ history, match }) => {
   };
 
   const createProductHandler = () => {
-    // TODO: CREATE PRODUCT
+    dispatch(createProduct());
   };
 
   return (
@@ -61,6 +89,8 @@ const ProductListPage = ({ history, match }) => {
       </Row>
       {loadingDelete && <Loader />}
       {errorDelete && <Message variant="danger">{errorDelete}</Message>}
+      {loadingCreate && <Loader />}
+      {errorCreate && <Message variant="danger">{errorCreate}</Message>}
       {loading ? (
         <Loader />
       ) : error ? (
