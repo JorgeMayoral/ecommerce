@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 // Actions
@@ -13,6 +14,7 @@ import Loader from './../components/Loader';
 import Message from './../components/Message';
 import Paginate from './../components/Paginate';
 import ProductCarousel from './../components/ProductCarousel';
+import Meta from './../components/Meta';
 
 const HomePage = ({ match }) => {
   const keyword = match.params.keyword;
@@ -28,7 +30,15 @@ const HomePage = ({ match }) => {
 
   return (
     <>
-      {!keyword && <ProductCarousel />}
+      <Meta />
+      {!keyword ? (
+        <ProductCarousel />
+      ) : (
+        <Link className="btn my-3" to="/">
+          <i className="fas fa-arrow-left mr-2"></i>
+          Go Back
+        </Link>
+      )}
       <h1>Latest Products</h1>
       {loading ? (
         <Loader />

@@ -26,6 +26,7 @@ import {
 import Rating from './../components/Rating';
 import Loader from './../components/Loader';
 import Message from './../components/Message';
+import Meta from './../components/Meta';
 
 const ProductPage = ({ history, match }) => {
   const [qty, setQty] = useState(1);
@@ -77,6 +78,7 @@ const ProductPage = ({ history, match }) => {
         <Message variant="danger">{error}</Message>
       ) : (
         <>
+          <Meta title={product.name} description={product.description} />
           <Row>
             <Col md={6}>
               <Image src={product.image} alt={product.name} fluid />
