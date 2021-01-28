@@ -83,7 +83,7 @@ const OrderPage = ({ match, history }) => {
         setSdkReady(true);
       }
     }
-  }, [dispatch, order, orderId, successDeliver, successPay]);
+  }, [dispatch, history, order, orderId, successDeliver, successPay, userInfo]);
 
   const successPaymentHandler = (paymentResult) => {
     console.log(paymentResult);

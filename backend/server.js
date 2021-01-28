@@ -1,6 +1,7 @@
 const path = require('path');
 const express = require('express');
 const dotenv = require('dotenv');
+const morgan = require('morgan');
 require('colors');
 
 const connectDB = require('./config/db');
@@ -26,6 +27,12 @@ connectDB(MONGODB_URI);
 const app = express();
 
 app.use(express.json());
+
+if (NODE_ENV === 'production') {
+  app.use(morgan('combined'));
+} else {
+  app.use(morgan('dev'));
+}
 
 app.get('/', (req, res) => {
   res.send('API is running');
